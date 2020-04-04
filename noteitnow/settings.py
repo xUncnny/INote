@@ -119,3 +119,5 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 SUMMERNOTE_THEME = 'bs4'
 
 TIME_ZONE =  'Asia/Kolkata'
+
+django_heroku.settings(locals())
