@@ -1,1 +1,1 @@
-web: gunicorn notekeeper.wsgi
+web: gunicorn mysite_project.wsgi --log-file -
