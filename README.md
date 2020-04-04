@@ -1,59 +1,120 @@
-# Notes App
-A note taking app using django framework. Frontend using html, css and bootstrap. Add notes so you never miss anything. A note can only be edited or deleted by the user who created it. There is user authentication, a wonderful search bar made using javascript, jquery and AJAX and many more features.
+# NOTEIT-NOW
 
-## Highlights
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-  * User Authentication
-  * Change Password functionality
-  * My notes page
-  * Real time search
-  * Back to top button
-  * Pagination(5 notes per page)
-  * Edit and delete options restricted to the author of the notes
-  * User friendly interface
-  
-## Requirements
+A User-Freindly Note Taking Application with some stunning features. This project is a part of [Google Summer of Code](https://summerofcode.withgoogle.com/) - 2020 Coding Task from the organization: [Global Alliance for Genomic Health](https://www.ga4gh.org/).
 
-Python 3.7  
-Django 2.2.8  
-And additional requirements are in **Pipfile**.
+## Table of content ##
 
-## Setting up the Project
+- [Features](#features)
+- [Installation & Setup](#installation)
+- [Reporting Bugs](#reporting-bugs)
+- [Contribution](#contributing)
+- [Demonstration Snaps](#demonstration-snaps)
+- [Get in touch](#-get-in-touch)
 
-  * Download and install Python 3.7
-  * Download and install Git.
-  * Fork the Repository.
-  * Clone the repository to your local machine `$ git clone https://github.com/<your-github-username>/notes-app.git`
-  * Change directory to notes-app `$ cd notes-app`
-  * Install pipenv `$ pip3 install pipenv`  
-  * Create a virtual environment and install all requirements from Pipfile `$ pipenv install`  
-  * Activate the env: `$ pipenv shell`
-  * Make migrations `$ python manage.py makemigrations`
-  * Migrate the changes to the database `$ python manage.py migrate`
-  * Create superuser `$ python manage.py createsuperuser`
-  * Run the server `$ python manage.py runserver`
-  
-## Deployment
-The notes app has been deployed in production using heroku. Here's a list of steps to be followed for deploying an app to heroku:
 
-  * Run pipenv lock to generate the appropriate Pipfile.lock `$ pipenv lock`
-  * Then create a Procfile which tells Heroku how to run the remote server where our code will live. `$ touch Procfile`
-  * For now we’re telling Heroku to use gunicorn as our production server and look in our mb_project.wsgi file for further instructions. `Update Procfile with - web: gunicorn <project_name>.wsgi --log-file - `
-  * Next install [gunicorn](https://gunicorn.org) which we’ll use in production while still using Django’s internal server for local development use. `$ pipenv install gunicorn==19.9.0`
-  * Finally update ALLOWED_HOSTS with '*' in settings.py file.
-  * push the updates to the GitHub repository.
-  * Login to heroku. `$ heroku login`
-  * Create a new heroku app. `$ heroku create <app_name>`
-  * Set git to use the name of your new app when you push to Heroku. `$ heroku git:remote -a <app_name>`
-  * If there are no static files run `$ heroku config:set DISABLE_COLLECTSTATIC=1`
-  * Push the code to Heroku. `$ git push heroku master`
-  * Add free scaling so the app is actually running online. `$ heroku ps:scale web=1`
-  
 
-## Contributing
 
-Feel free to raise a issue or make a pull request to fix a bug or add a new feature. If you are new to open source you can first read about git by [clicking here](https://www.codecademy.com/learn/learn-git).
+### Made by [Syed Farhan Ahmad](https://www.linkedin.com/in/syedfarhanahmad/)
 
-## Communtiy Slack Channel
+## Features ##
 
-To get started, the first step is to meet the community. We use slack to communicate, and there the helpful community will guide you. Slack is an instant messaging service used by developers and users of GitHub. It uses chatrooms, where developers can join in and can talk about a particular topic. [Click here](https://join.slack.com/t/codingninjas-talk/shared_invite/enQtODI1ODM0NTIzNzMwLTk3ZjMwMDExNWFlMTMyZDdjMjYzOWMzNjFmYzY5YjYyYjYzMmJiNDEyZmZlM2ExMDU0MGUzYzRiMTMyZGFiNDI) to join our Slack Workspace.
+[(Back to top)](#table-of-content)
+
+- Create new Note(s)
+- Update existing Note(s)
+- Delete existing Note(s)
+- Dedicated View for each note
+- Multiple tags support for each note
+- Search for a note
+- Login/Sign Up pages 
+- DB schema that supports multiple users
+- Powerful admin console(Django-admin)
+- Simple and elegant UI
+
+
+# Installation #
+
+[(Back to top)](#table-of-content)
+
+- Clone the repository
+
+```bash
+git clone https://github.com/born-2learn/noteitnow.git
+```
+
+It is recommended to follow further steps while in a virtual environment. To create a virtual environment, follow [this link](https://packaging.python.org/guides/installing-using-pip-and-virtual-environments/).
+
+- Next, Install Dependencies
+
+```bash
+cd NoteIt-Now
+pip3 install -r requirements.txt
+```
+
+- Run django migrations
+
+```bash
+python3 manage.py makemigrations
+python3 manage.py migrate
+```
+
+- Run django migrations( for apps without migrations)
+
+```bash
+python3 manage.py migrate --run-syncdb
+```
+
+- Run django server
+
+```bash
+python3 manage.py runserver
+```
+
+
+## Reporting Bugs ##
+[(Back to top)](#table-of-content)
+
+Please, use [ISSUE_TEMPLATE/bug_report.md](.github/ISSUE_TEMPLATE/bug_report.md) to create an issue and describe your bug.
+
+
+## Contributing ##
+[(Back to top)](#table-of-content)
+
+Below is a list of suggested contributions you can make. Before you work on any, it is advised that you create an issue using the [ISSUE_TEMPLATE/contribution.md](.github/ISSUE_TEMPLATE/contribution.md) to tell us what you plan to work on. This ensures that your work can be merged to the `master` branch in a timely manner.
+
+
+# Demonstration Snaps #
+
+[(Back to top)](#table-of-content)
+
+### HomePage with basic information, and developer's accounts links.
+
+![HomePage](pictures/home_page.png)   
+
+### Login Page with NavBar
+![LoginPage](pictures/login.png)
+
+### Sign Up page
+![SignUpPage](pictures/signup.png)
+
+### Notes - The HEART of the application
+![Notes](pictures/notes.png)
+
+
+
+## Get in Touch ##
+
+[(Back to top)](#table-of-content)
+
+[LinkedIn](https://www.linkedin.com/in/syedfarhanahmad/)
+
+[Follow me on Github](https://github.com/born-2learn)
+
+## License
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)   
+This project is based on the **MIT Licence**.
+
+
+

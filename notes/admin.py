@@ -1,11 +1,7 @@
 from django.contrib import admin
-
-# Register your models here.
-
 from .models import Note
 
-class NoteAdmin(admin.ModelAdmin):
-    class Meta:
-	    model = Note
 
-admin.site.register(Note,NoteAdmin)
+@admin.register(Note)
+class NoteAdmin(admin.ModelAdmin):
+    list_display = ('note_title', 'created_at', 'updated_at', 'user')

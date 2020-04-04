@@ -1,17 +1,17 @@
 from django.urls import path
-
-from .views import NoteListView, MyNoteListView, NoteCreateView, HomePageView, NoteDeleteView, NoteUpdateView, NoteDetailView, search_view
+from django.urls import include
+from . import views
+from django.contrib.auth.decorators import login_required
 
 urlpatterns = [
-    path('', HomePageView.as_view(), name='home'),
-    path('notes/', NoteListView.as_view(), name='note_list'),
-    path('mynotes/', MyNoteListView.as_view(), name='my_notes_list'),
-    path('new/', NoteCreateView.as_view(), name='note_new'),
-    path('<int:pk>/',
-         NoteDetailView.as_view(), name='note_detail'),
-    path('<int:pk>/delete/',
-         NoteDeleteView.as_view(), name='note_delete'),
-    path('<int:pk>/edit/',
-         NoteUpdateView.as_view(), name='note_edit'),
-    path('search/', search_view, name='search'),
+    path('notes/', login_required(views.home), name='notes'),       
+    path('notes/search/', views.search_note, name='search_note'),
+    path('notes/<slug:slug>/', login_required(views.get_note_details), name='note_detail'),
+    path('notes/<int:pk>/delete/', login_required(views.delete_note), name='delete_single_note'),
+    path('notes/<int:pk>/delete/confirm/', login_required(views.confirm_delete_note), name='confirm_delete_note'),
+    path('notes/<int:pk>/edit/', login_required(views.edit_note_details), name='note_details_edit'),
+    path('notes/share/<str:signed_pk>/', views.get_shareable_link, name='share_notes'),
+    path('tags/<slug:slug>/', views.get_all_notes_tags, name='get_all_notes_tags'),
+    path('', views.welcomepage, name='welcome'),
+    path('home', login_required(views.home), name='home')
 ]

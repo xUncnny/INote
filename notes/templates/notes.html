@@ -26,7 +26,7 @@
                         <tr class="text-center">
                             <th scope="col">Title</th>
                             <th scope="col">Last Updated</th>
-                            <th scope="col">Edit</th>
+                            <th scope="col">Edit/View</th>
                             <th scope="col">Delete</th>
                         </tr>
                     </thead>
@@ -36,7 +36,7 @@
                             <td><a href="{% url 'note_detail' note.slug %}">{{ note.note_title|truncatechars:30 }}</a></td>
                             <td>{{ note.updated_at|naturaltime }}</td>
                             <td class="text-center">
-                                <a class="open-modal" data-url="{% url 'note_details_edit' note.id %}" style="text-decoration: none; color: white" data-toggle="tooltip" title="Edit Note">    
+                                <a class="open-modal" data-url="{% url 'note_details_edit' note.id %}" style="text-decoration: none; color: white" data-toggle="tooltip" title="Edit/View Note">    
                                     <span class="btn btn-primary" style="border-radius: 0;"><i class="far fa-edit"> </i></span>
                                 </a>
                             </td>

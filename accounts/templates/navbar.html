@@ -1,17 +1,13 @@
-{% load static %}
-<nav class="navbar navbar-expand-md navbar-dark sticky-top bg-dark" data-sidebarClass="navbar-dark bg-dark">
+<nav class="navbar navbar-expand-md navbar-light sticky-top bg-light" data-sidebarClass="navbar-dark bg-dark">
     <a class="navbar-brand" href="{% url 'home' %}">
-        Notekeeper
+        INOTE
     </a>
-    <button class="navbar-toggler leftNavbarToggler" type="button" data-toggle="collapse" data-target="#navbarNav"
-        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <button class="navbar-toggler leftNavbarToggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
-    </button>
-    {% if request.user.is_authenticated %}
+    </button> {% if request.user.is_authenticated %}
     <button class="ml-auto btn d-lg-none d-md-none d-sm-block d-xs-block" data-toggle="modal" data-target="#add_note" style="cursor: pointer; background-color: transparent;border-color: gray;">
-        <span class="fa fa-plus" style="color: white;"></span>
-    </button>
-    {% endif %}
+        <span class="fa fa-plus" style="color: gray;"></span>
+    </button> {% endif %}
     <div class="navbar-collapse collapse" id="navbarNav">
         {% if request.user.is_authenticated %}
         <ul class="navbar-nav ml-auto">
