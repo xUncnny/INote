@@ -1,1 +1,1 @@
-web: gunicorn noteitnow.wsgi
+web: gunicorn notekeeper.wsgi

@@ -9,36 +9,99 @@ from django.http import JsonResponse, HttpResponse
 from io import BytesIO
 from django.conf import settings
 from django.template.loader import get_template
-#from django.core.signing import BadSignature
+from xhtml2pdf import pisa
+from django.core.signing import BadSignature
 from taggit.models import Tag
 
-def welcomepage(request):
-    return render(request, 'welcome.html')
+
+def link_callback(uri, rel):
+    """
+    Convert HTML URIs to absolute system paths so xhtml2pdf can access those
+    resources
+    """
+    # use short variable names
+    sUrl = settings.STATIC_URL      # Typically /static/
+    sRoot = settings.STATIC_ROOT    # Typically /home/userX/project_static/
+    mUrl = settings.MEDIA_URL       # Typically /static/media/
+    mRoot = settings.MEDIA_ROOT     # Typically /home/userX/project_static/media/
+
+    # convert URIs to absolute system paths
+    if uri.startswith(mUrl):
+        path = os.path.join(mRoot, uri.replace(mUrl, ""))
+    elif uri.startswith(sUrl):
+        path = os.path.join(sRoot, uri.replace(sUrl, ""))
+    else:
+        return uri  # handle absolute uri (ie: http://some.tld/foo.png)
+
+    # make sure that file exists
+    if not os.path.isfile(path):
+            raise Exception(
+                'media URI must start with %s or %s' % (sUrl, mUrl)
+            )
+    return path
+
+
+def render_to_pdf(template_src, context_dict={}):
+    '''
+        Helper function to generate pdf from html
+    '''
+    template = get_template(template_src)
+    html  = template.render(context_dict)
+    result = BytesIO()
+    pdf = pisa.pisaDocument(BytesIO(html.encode("UTF-8")), result, link_callback=link_callback)
+    if not pdf.err:
+        return HttpResponse(result.getvalue(), content_type='application/pdf')
+    return HttpResponse("Error Rendering PDF", status=400)
+
+
+def generate_pdf(request, slug):
+    note = get_object_or_404(Note, slug=slug)
+    if note.user != request.user:
+        messages.error(request, 'You are not authenticated to perform this action')
+        return redirect('notes')
+    notes = Note.objects.filter(user=request.user).order_by('-updated_at')[:10]
+    add_note_form = AddNoteForm()
+    context = {
+        'note_detail': note,
+    }
+    pdf = render_to_pdf('note_as_pdf.html', context)
+    if pdf:
+        response = HttpResponse(pdf, content_type='application/pdf')
+        filename = "{}.pdf".format(note.slug)
+        content = "inline; filename={}".format(filename)
+        content = "attachment; filename={}".format(filename)
+        response['Content-Disposition'] = content
+        return response
+    return HttpResponse("Not found")
+
 
 def home(request):
-    notes = Note.objects.filter(user=request.user).order_by('-updated_at')[:10]
-    all_notes = Note.objects.filter(user=request.user).order_by('-updated_at')
+    if request.user.is_authenticated:
+        notes = Note.objects.filter(user=request.user).order_by('-updated_at')[:10]
+        all_notes = Note.objects.filter(user=request.user).order_by('-updated_at')
+        # paginator = Paginator(all_notes, 15)
 
-    if request.method == 'POST':
-        form = AddNoteForm(request.POST)
-        if form.is_valid():
-            form_data = form.save(commit=False)
-            form_data.user = request.user
-            form_data.save()
-            # Without this next line the tags won't be saved.
-            form.save_m2m()
+        if request.method == 'POST':
+            form = AddNoteForm(request.POST)
+            if form.is_valid():
+                form_data = form.save(commit=False)
+                form_data.user = request.user
+                form_data.save()
+                # Without this next line the tags won't be saved.
+                form.save_m2m()
+                form = AddNoteForm()
+                messages.success(request, 'Note added successfully!')
+                return redirect('notes')
+        else:
             form = AddNoteForm()
-            messages.success(request, 'Note added successfully!')
-            return redirect('notes')
+        context = {
+            'notes': notes,
+            'all_notes': all_notes,
+            'add_note_form': form,
+        }
+        return render(request, 'notes.html', context)
     else:
-        form = AddNoteForm()
-   
-    context = {
-        'notes': notes,
-        'all_notes': all_notes,
-        'add_note_form': form,
-    }
-    return render(request, 'notes.html', context)
+        return render(request, 'index.html')
 
 
 def get_note_details(request, slug):
@@ -130,17 +193,14 @@ def search_note(request):
 
 def get_shareable_link(request, signed_pk):
     try:
-        #pk = Note.signer.unsign(signed_pk)
-        pk = signed_pk
+        pk = Note.signer.unsign(signed_pk)
         note = Note.objects.get(pk=pk)
         context = {
             'note_detail': note
         }
         return render(request, 'shared_note.html', context)
-    #except (BadSignature, Note.DoesNotExist):
-    #raise Http404('No Order matches the given query.')
-    except:
-        pass
+    except (BadSignature, Note.DoesNotExist):
+        raise Http404('No Order matches the given query.')
 
 
 def get_all_notes_tags(request, slug):

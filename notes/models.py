@@ -4,7 +4,7 @@ from django.shortcuts import redirect
 from django.utils.text import slugify
 from django.contrib.auth.models import User
 from taggit.managers import TaggableManager
-#from django.core.signing import Signer
+from django.core.signing import Signer
 from django.utils.html import mark_safe
 import markdown
 import uuid
@@ -17,9 +17,9 @@ import markdown.extensions.toc
 from django_cryptography.fields import encrypt
 
 
-def create_new_slug(_class, field):
+def generate_unique_slug(_class, field):
     """
-        return unique slug if origin slug exists.
+        return unique slug if origin slug is exist.
         eg: `foo-bar` => `foo-bar-1`
         :param `field` is specific field for title.
     """
@@ -40,19 +40,28 @@ class Note(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     slug = models.SlugField(max_length=200, unique=True)
     tags = TaggableManager()
-    #signer = Signer(salt='notes.Note')
+    signer = Signer(salt='notes.Note')
 
-    def return_markdown_message(self):
+    def get_message_as_markdown(self):
         return mark_safe(
             markdown.markdown(
                 self.note_content,
                 extensions=['codehilite', 'fenced_code', 'markdown_checklist.extension', 'tables', 'toc'],
+                # extension_configs={
+                #     'codehilite':{
+                #         'linenums': True
+                #     }
+                # }
                 output_format="html5"
             )
         )
-    
+
+    def get_signed_hash(self):
+        signed_pk = self.signer.sign(self.pk)
+        return signed_pk
+
     def get_absolute_url(self):
-        return reverse('share_notes', args=(self.pk,))
+        return reverse('share_notes', args=(self.get_signed_hash(),))
 
     def __str__(self):
         return self.note_title
@@ -61,9 +70,9 @@ class Note(models.Model):
         title = unidecode(self.note_title)
         if self.slug:
             if slugify(title) != self.slug:
-                self.slug = create_new_slug(Note, title)
+                self.slug = generate_unique_slug(Note, title)
         else:
-            self.slug = create_new_slug(Note, title)
+            self.slug = generate_unique_slug(Note, title)
         super(Note, self).save(*args, **kwargs)
 
 
