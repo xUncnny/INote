@@ -1,8 +1,6 @@
-# NOTEIT-NOW
-
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-
-A User-Freindly Note Taking Application with some stunning features. This project is a part of [Google Summer of Code](https://summerofcode.withgoogle.com/) - 2020 Coding Task from the organization: [Global Alliance for Genomic Health](https://www.ga4gh.org/).
+# INOTE
+ a simple and lite weight notepad application that allows you to capture your thought and organize your notes. 
+ https://inote-mohd.herokuapp.com/
 
 ## Table of content ##
 
@@ -16,7 +14,6 @@ A User-Freindly Note Taking Application with some stunning features. This projec
 
 
 
-### Made by [Syed Farhan Ahmad](https://www.linkedin.com/in/syedfarhanahmad/)
 
 ## Features ##
 
@@ -108,13 +105,8 @@ Below is a list of suggested contributions you can make. Before you work on any,
 
 [(Back to top)](#table-of-content)
 
-[LinkedIn](https://www.linkedin.com/in/syedfarhanahmad/)
 
-[Follow me on Github](https://github.com/born-2learn)
 
-## License
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)   
-This project is based on the **MIT Licence**.
 
 
 
